@@ -11,19 +11,19 @@ struct bit
     bit(int s)
     {
         n = s;
-        tree.assign(n, 0);
+        tree.assign(n + 1, 0);
     }
 
     ll get(int i)
     {
         ll res = 0;
-        for(; i >= 0; i -= i & -i) res += tree[i];
+        for(; i > 0; i -= i & -i) res += tree[i];
         return res;
     }
 
     void add(int i, int x)
     {
-        for (; i < n; i += i & -i) tree[i] += x;
+        for (; i <= n; i += i & -i) tree[i] += x;
     }
     
     ll rsq(int l, int r)
@@ -37,11 +37,11 @@ struct bit
 inline ll get(int i, vecotr<ll>& tree)
 {
     ll res = 0;
-    for(; i >= 0; i -= i & -i) res += tree[i];
+    for(; i > 0; i -= i & -i) res += tree[i];
     return res;
 }
 
 inline void add(int i, int x, vector<ll>& tree)
 {
-    for (; i < n; i += i & -i) tree[i] += x;
+    for (; i <= n; i += i & -i) tree[i] += x;
 }
