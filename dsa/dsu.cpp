@@ -46,7 +46,7 @@ struct dsu
 
 
 // Nonstruct imple
-int find(int n, int parent[])
+int find(int u, int parent[])
 {
     if (parent[u] == u) return u;
     return parent[u] = find(parent[u]);
@@ -68,7 +68,7 @@ void merge(int u, int v, int parent[], int size[])
 
 // vector imple
 // parent = 0 for roots
-int find(int n, vecotr<int>& a)
+int find(int u, vecotr<int>& a)
 {
     if (!a[u]) return u;
     return a[u] = find(a[u]);
