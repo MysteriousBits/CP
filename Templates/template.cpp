@@ -7,24 +7,24 @@ using namespace __gnu_pbds;
 
 // Template
 // ==============================================
+    template<typename T, typename comp = less<T>>
+    using ordered_set =  tree<T, null_type, comp, rb_tree_tag, tree_order_statistics_node_update>;
     typedef long long ll;
     typedef vector<int> VI;
     typedef vector<bool> VB;
     typedef vector<vector<int>> VVI;
     typedef pair<int, int> PI;
     typedef vector<pair<int, int>> VPI;
-    template<typename T>
-    using ordered_set =  tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
-    
     #define pb push_back
     #define ff first
     #define ss second
     #define loop(i, s, e) for (int i = s; i < e; ++i)
-    #define fill(v) for (auto& x : v) cin >> x
+    #define inp(v) for (auto& x : v) cin >> x
     #define all(a) a.begin(), a.end()
+    #define revall(a) a.rbegin(), a.rend()
     #define nl "\n"
     #define MOD 998244353
-    #define MAXN 1000001
+    #define MAXN 200001
     #define INF (int) 1e9
     #define MINF (int) -1e9
 // ==============================================

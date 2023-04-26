@@ -1,75 +1,65 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Template
-// ==============================================
-    typedef long long ll;
-    typedef vector<int> VI;
-    typedef vector<bool> VB;
-    typedef vector<vector<int>> VVI;
-    typedef pair<int, int> PI;
-    typedef vector<pair<int, int>> VPI;
-    #define pb push_back
-    #define ff first
-    #define ss second
-    #define loop(i, s, e) for (int i = s; i < e; ++i)
-    #define inp(v) for (auto& x : v) cin >> x
-    #define all(a) a.begin(), a.end()
-    #define revall(a) a.rbegin(), a.rend()
-    #define nl "\n"
-    #define MOD 998244353
-    #define MAXN 200001
-    #define INF (int) 1e9
-    #define MINF (int) -1e9
-// ==============================================
+#define MAXN 100001
 
-int height[MAXN];
-int st[MAXN][20];
+const int K = 25;
+int step = 0;
+int depth[MAXN], vis_start[MAXN], vis_end[MAXN];
+int st[MAXN][K];
+
+int k;
+vector<vector<int>> tree;
 
 void build_st(int u, int p)
 {
     st[u][0] = p;
- 
     for (int i = 1; i <= k; ++i)
-    {
         st[u][i] = st[st[u][i - 1]][i - 1];
+}
+
+void dfs(int u, int p, int d)
+{
+    depth[u] = d++;
+    vis_start[u] = step++;
+    build_st(u, p);
+
+    for (auto v : tree[u])
+    {
+        if (v != p) dfs(v, u, d);
     }
+
+    vis_end[u] = step++;
+}
+
+bool is_ancestor(int a, int b)
+{
+    return vis_start[a] < vis_start[b] && vis_end[a] > vis_end[b];
+}
+
+int lca(int a, int b)
+{
+    if (is_ancestor(a, b)) return a;
+    if (is_ancestor(b, a)) return b;
+
+    for (int i = k; i >= 0)
+    {
+        if (!is_ancestor(st[a][i], b)) a = st[a][i];
+    }
+
+    return st[a][0];
 }
 
 int get_ancestor(int u, int n)
 {
-    int x = 0;
-    while (n > 0)
+    for (int i = 0; n > 0; ++i)
     {
-        if (n & (1 << lstbits))
+        if (n & (1 << i))
         {
-            u = st[u][x];
-            n -= lstbits;
+            u = st[u][i];
+            n -= (1 << i);
         }
-        x ++;
     }
- 
+
     return u;
-}
- 
-int lca(int a, int b)
-{
-    if (height[b] > height[a]) swap(a, b);
- 
-    if (height[a] > height[b])
-    {
-        a = get_ancestor(a, height[a] - height[b]);
-    }
- 
-    if (a == b) return a;
- 
-    int l = 1, r = height[a];
-    while (l < r)
-    {
-        int mid = (l + r) / 2;
-        if (get_ancestor(a, mid) == get_ancestor(b, mid)) r = mid;
-        else l = mid + 1;
-    }
- 
-    return get_ancestor(a, l);
 }
