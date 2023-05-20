@@ -1,0 +1,39 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "",
+            "args": [
+                "g++",
+                "-Wall",
+                "-std=c++17",
+                "-o",
+                "${fileBasenameNoExtension}",
+                "${fileBasenameNoExtension}.cpp",
+                "&&",
+                "${fileBasenameNoExtension}",
+                "<input.in>",
+                "output.out"
+            ],
+            "group": "build",
+            "presentation": {
+                // Reveal the output only if unrecognized errors occur.
+                "reveal": "silent"
+            },
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                "file": 1,
+                "line": 2,
+                "column": 3,
+                "severity": 4,
+                "message": 5
+                }
+            }
+        }
+    ]
+}
