@@ -1,4 +1,4 @@
-brute = [*open('brute.txt')]
+brute = [*open('brute.out')]
 out = [*open('output.out')]
 
 for i in range(len(brute)):
