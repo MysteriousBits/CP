@@ -1,3 +1,4 @@
+// #define DEBUG
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -27,6 +28,13 @@ using namespace __gnu_pbds;
     #define MAXN 200001
     #define INF (int) 1e9
     #define MINF (int) -1e9
+
+    // Debugging
+    #ifdef DEBUG
+    #define see(a) cerr << #a << ": " << a
+    #else
+    #define see(a)
+    #endif
 // ==============================================
 
 void solve()
