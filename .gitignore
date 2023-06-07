@@ -35,3 +35,8 @@
 *.exe
 *.out
 *.app
+
+# Logs, input/output
+*.in
+*.out
+*.log
