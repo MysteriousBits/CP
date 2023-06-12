@@ -8,10 +8,19 @@ using namespace __gnu_pbds;
 
 // Template
 // ==============================================
+    // Debugging
+    #ifdef LOCAL
+    #include "debug.h"
+    #else
+    #define debug(...)
+    #define see(x)
+    #endif
+
     template<typename T, typename comp = less<T>>
     using ordered_set =  tree<T, null_type, comp, rb_tree_tag, tree_order_statistics_node_update>;
     typedef long long ll;
     typedef vector<int> VI;
+    typedef vector<long long> VLL;
     typedef vector<bool> VB;
     typedef vector<vector<int>> VVI;
     typedef pair<int, int> PI;
@@ -28,13 +37,6 @@ using namespace __gnu_pbds;
     #define MAXN 200001
     #define INF (int) 1e9
     #define MINF (int) -1e9
-
-    // Debugging
-    #ifdef DEBUG
-    #define see(a) cerr << #a << ": " << a
-    #else
-    #define see(a)
-    #endif
 // ==============================================
 
 void solve()

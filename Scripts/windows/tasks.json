@@ -9,6 +9,7 @@
                 "g++",
                 "-Wall",
                 "-std=c++17",
+                "-DLOCAL",
                 "-o",
                 "${fileBasenameNoExtension}",
                 "${fileBasenameNoExtension}.cpp",
