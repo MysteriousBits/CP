@@ -114,7 +114,7 @@ void solve()
     else
     {
         cout << ans.size() << nl;
-        for (auto [c, i] : ans) cout << c << ' ' << i << nl;
+        for (auto [c, i] : ans) cout << c << '#' << i << nl;
     }
 }
 

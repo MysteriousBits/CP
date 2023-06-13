@@ -1,3 +1,5 @@
+import sys
+
 brute = [*open('brute.out')]
 out = [*open('output.out')]
 
@@ -19,8 +21,8 @@ for i in range(len(out)):
         print("! WA")
         print("Output doesn't match at line", i + 1)
         print("Expected:", brute[i])
-        print("Your's:", out[i])
-        quit()
+        print("Yours:", out[i])
+        sys.exit(1)
 
 print("OK")
 print("Output matched.")
