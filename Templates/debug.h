@@ -3,7 +3,8 @@ using namespace std;
 
 #define see(x) cerr << #x << ": " << x << nl
 
-void debug(...)
+template<typename... Args>
+void debug(Args... args)
 {
-    
+    ((cerr << " " << args), ...) << "\n";
 }
