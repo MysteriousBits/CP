@@ -4,24 +4,18 @@ using namespace std;
 // struct imple
 struct dsu
 {
-    int *parent, *size;
+    vector<int> parent, size;
  
     dsu(int n)
     {
-        parent = new int[n + 1];
-        size = new int[n + 1];
+        parent.resize(n + 1);
+        size.resize(n + 1);
  
         for (int i = 1; i <= n; ++i)
         {
             parent[i] = i;
             size[i] = 1;
         }
-    }
-
-    ~dsu()
-    {
-        delete[] parent;
-        delete[] size;
     }
 
     int find(int u)
@@ -46,13 +40,13 @@ struct dsu
 
 
 // Nonstruct imple
-int find(int u, int parent[])
+int find(int u)
 {
     if (parent[u] == u) return u;
     return parent[u] = find(parent[u]);
 }
 
-void merge(int u, int v, int parent[], int size[])
+void merge(int u, int v)
 {
     u = find(u, parent);
     v = find(v, parent);
