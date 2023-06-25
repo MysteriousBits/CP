@@ -53,5 +53,9 @@ int main()
     cin >> t;
     while(t--) solve();
 
+    #ifdef LOCAL
+    cerr << "Execution time: " << 1000.f * clock() / CLOCKS_PER_SEC << " ms." << nl;
+    #endif
+    
     return 0;
 }
