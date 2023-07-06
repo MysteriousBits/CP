@@ -3,12 +3,12 @@ using namespace std;
 typedef long long ll;
 
 // struct imple
-struct bit
+struct fenwick
 {
     int n;
     vector<ll> tree;
 
-    bit(int s)
+    fenwick(int s)
     {
         n = s;
         tree.assign(n + 1, 0);
@@ -31,6 +31,7 @@ struct bit
         return get(r) - get(l - 1);
     }
 };
+
 
 
 // non-struct imple
