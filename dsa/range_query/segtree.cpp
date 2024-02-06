@@ -8,7 +8,7 @@ struct segtree
     #define right(u) 2 * u + 2
 
     int n;
-    T init_val = 0;
+    T init_val;
     vector<T> tree;
     function<T (T, T)> f;
 
