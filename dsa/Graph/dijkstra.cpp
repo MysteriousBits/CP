@@ -30,7 +30,7 @@ struct Node
 
     bool operator< (const Node& v) const
     {
-        return dist < v.dist;
+        return dist > v.dist;
     }
 };
 
