@@ -5,7 +5,16 @@ typedef long long ll;
 #define MOD 998244353
 #define MAXN 100001
 
-int fact[MAXN];
+ll fact[MAXN];
+
+void calc_fact()
+{
+    fact[0] = 1;
+    for (int i = 1; i < MAXN; ++i)
+    {
+        fact[i] = (fact[i - 1] * i) % MOD;
+    }
+}
 
 ll mod(ll n)
 {
