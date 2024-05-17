@@ -16,7 +16,8 @@
                 "&&",
                 "${fileBasenameNoExtension}",
                 "<input.in>",
-                "output.out"
+                "output.out",
+                "2>error.log"
             ],
             "group": "build",
             "presentation": {

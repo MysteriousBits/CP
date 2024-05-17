@@ -12,6 +12,8 @@ struct segtree
     vector<T> tree;
     function<T (T, T)> f;
 
+    segtree() {} // Dummy constructor for global declaration
+    
     segtree(int sz, function<T (T, T)> f, T val = 0)
     {
         n = sz;

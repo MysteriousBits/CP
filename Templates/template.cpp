@@ -1,12 +1,15 @@
 #include <bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-
 using namespace std;
-using namespace __gnu_pbds;
 
 // Template
 // ==============================================
+    // pbds
+    #include <ext/pb_ds/assoc_container.hpp>
+    #include <ext/pb_ds/tree_policy.hpp>
+    using namespace __gnu_pbds;
+    template<typename T, typename comp = less<T>>
+    using ordered_set =  tree<T, null_type, comp, rb_tree_tag, tree_order_statistics_node_update>;
+
     // Debugging
     #ifdef LOCAL
     #include "debug.h"
@@ -15,14 +18,14 @@ using namespace __gnu_pbds;
     #define see(x)
     #endif
 
-    template<typename T, typename comp = less<T>>
-    using ordered_set =  tree<T, null_type, comp, rb_tree_tag, tree_order_statistics_node_update>;
+
     typedef long long ll;
     typedef vector<int> VI;
     typedef vector<long long> VLL;
     typedef vector<bool> VB;
     typedef vector<vector<int>> VVI;
     typedef pair<int, int> PI;
+    typedef pair<ll, ll> PLL;
     typedef vector<pair<int, int>> VPI;
     #define pb push_back
     #define ff first
@@ -32,10 +35,13 @@ using namespace __gnu_pbds;
     #define all(a) a.begin(), a.end()
     #define revall(a) a.rbegin(), a.rend()
     #define nl "\n"
-    #define MOD 998244353
-    #define MAXN 200001
+    // #define MOD 998244353
+    #define MOD 1000000007
+    #define MAXN 300002
     #define INF (int) 1e9
-    #define INFL (long long) 1e18
+    #define INFL (ll) 1e18
+    #define yep cout << "YES\n"
+    #define nope cout << "NO\n"
 // ==============================================
 
 void solve()
