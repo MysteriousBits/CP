@@ -4,11 +4,11 @@ using namespace std;
 // Template
 // ==============================================
     // pbds
-    #include <ext/pb_ds/assoc_container.hpp>
-    #include <ext/pb_ds/tree_policy.hpp>
-    using namespace __gnu_pbds;
-    template<typename T, typename comp = less<T>>
-    using ordered_set =  tree<T, null_type, comp, rb_tree_tag, tree_order_statistics_node_update>;
+    // #include <ext/pb_ds/assoc_container.hpp>
+    // #include <ext/pb_ds/tree_policy.hpp>
+    // using namespace __gnu_pbds;
+    // template<typename T, typename comp = less<T>>
+    // using ordered_set =  tree<T, null_type, comp, rb_tree_tag, tree_order_statistics_node_update>;
 
     // Debugging
     #ifdef LOCAL
@@ -30,6 +30,7 @@ using namespace std;
     #define pb push_back
     #define ff first
     #define ss second
+    #define mp make_pair
     #define all(a) a.begin(), a.end()
     #define revall(a) a.rbegin(), a.rend()
 
