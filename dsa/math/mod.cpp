@@ -41,6 +41,16 @@ inline ll inv(ll n)
     return modpow(n, MOD - 2);
 }
 
+inline ll mul(ll x, ll y)
+{
+    return mod(x * y);
+}
+
+inline ll dvd(ll x, ll y)
+{
+    return mul(x, inv(y));
+}
+
 ll C(int n, int k)
 {
     if (k > n) return 0;
