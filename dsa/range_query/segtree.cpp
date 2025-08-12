@@ -24,7 +24,7 @@ struct segtree
     }
 
     void build(vector<T>& a) { _build(0, 0, n - 1, a); }
-    void update(int i, int x) { _update(0, 0, n - 1, i, x); }
+    void update(int i, T x) { _update(0, 0, n - 1, i, x); }
     T get(int l, int r) { return _get(0, 0, n - 1, l, r); }
 
     void _build(int u, int l, int r, vector<T>& a)
