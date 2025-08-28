@@ -1,0 +1,150 @@
+\chapter{Graph}
+
+\section{Dijkstra}
+\begin{lstlisting}[language=C++]
+struct Node
+{
+    int u;
+    ll dist;
+
+    bool operator< (const Node& v) const
+    {
+        return dist > v.dist;
+    }
+};
+
+void dijkstra(int start, vector<ll>& dis, vector<VPI>& adj)
+{
+    priority_queue<Node> q;
+    dis[start] = 0;
+    q.push({start, 0});
+
+    while (!q.empty())
+    {
+        Node node = q.top();
+        int u = node.u;
+        q.pop();
+
+        if (dis[u] < node.dist) continue;
+
+        for (auto e : adj[u])
+        {
+            if (node.dist + e.ss < dis[e.ff])
+            {
+                dis[e.ff] = node.dist + e.ss;
+                q.push({e.ff, dis[e.ff]});
+            }
+        }
+    }
+}
+\end{lstlisting}
+\sectionend
+
+\section{LCA}
+\begin{lstlisting}[language=C++]
+int k;
+VVI tree;
+int step = 0;
+VI vis_start, vis_end;
+VVI st;
+
+void build_st(int u, int p)
+{
+    st[u][0] = p;
+    for (int i = 1; i <= k; ++i)
+        st[u][i] = st[st[u][i - 1]][i - 1];
+}
+
+void dfs(int u, int p)
+{
+    vis_start[u] = step++;
+    build_st(u, p);
+
+    for (auto v : tree[u])
+    {
+        if (v != p) dfs(v, u);
+    }
+
+    vis_end[u] = step++;
+}
+
+bool is_ancestor(int a, int b)
+{
+    return vis_start[a] < vis_start[b] && vis_end[a] > vis_end[b];
+}
+
+int lca(int a, int b)
+{
+    if (a == b) return a;
+    if (is_ancestor(a, b)) return a;
+    if (is_ancestor(b, a)) return b;
+
+    for (int i = k; i >= 0; --i)
+    {
+        if (!is_ancestor(st[a][i], b)) a = st[a][i];
+    }
+
+    return st[a][0];
+}
+
+void init(int n)
+{
+    vis_start.assign(n + 1, 0);
+    vis_end.assign(n + 1, 0);
+
+    k = __lg(2 * n - 1);
+    st.assign(n + 1, VI(k + 1));
+    dfs(1, 1);
+}
+\end{lstlisting}
+\sectionend
+
+\section{SCC}
+\begin{lstlisting}[language=C++]
+VVI scc;
+VI stk;
+int disc[MAXN], low[MAXN];
+bool instk[MAXN];
+int cur_time;
+
+void dfs_scc(int u, VVI& g)
+{
+    disc[u] = low[u] = ++cur_time;
+    instk[u] = true;
+    stk.pb(u);
+
+    for (int v : g[u])
+    {
+        if (!disc[v])
+        {
+            dfs_scc(v, g);
+            low[u] = min(low[u], low[v]);
+        }
+        else if (instk[v])
+            low[u] = min(low[u], disc[v]);
+    }
+
+    if (low[u] < disc[u]) return;
+
+    scc.pb(VI());
+    bool rem = true;
+    while (rem)
+    {
+        int v = stk.back();
+        stk.pop_back();
+        instk[v] = false;
+        scc.back().pb(v);
+        rem = v != u;
+    }
+}
+
+void tarjan(VVI& g)
+{
+    cur_time = 0;
+    int n = g.size();
+
+    for (int i = 0; i < n; ++i) disc[i] = 0;
+    for (int u = 1; u < n; ++u) if (!disc[u]) dfs_scc(u, g);
+}
+\end{lstlisting}
+\sectionend
