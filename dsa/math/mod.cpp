@@ -43,7 +43,7 @@ inline ll inv(ll n)
 
 inline ll mul(ll x, ll y)
 {
-    return mod(x * y);
+    return (x * y) % MOD;
 }
 
 inline ll dvd(ll x, ll y)
