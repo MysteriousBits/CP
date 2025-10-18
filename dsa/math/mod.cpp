@@ -22,7 +22,7 @@ ll mod(ll n)
     return n < 0 ? MOD + n : n;
 }
 
-ll modpow(ll n, int k)
+ll modpow(ll n, ll k)
 {
     ll ret = 1;
 
@@ -43,7 +43,7 @@ inline ll inv(ll n)
 
 inline ll mul(ll x, ll y)
 {
-    return (x * y) % MOD;
+    return ((x % MOD) * (y % MOD)) % MOD;
 }
 
 inline ll dvd(ll x, ll y)
