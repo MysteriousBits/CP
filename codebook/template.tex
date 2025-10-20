@@ -93,11 +93,20 @@ void debug(Args... args)
 \section{sublime.build}
 \begin{lstlisting}
 {
-    "shell_cmd": "g++ -Wall -std=c++20 -DLOCAL $file -o $file_base_name && ./$file_base_name <input.in> output.out 2> error.log",
+    "shell_cmd": "g++ -Wall -std=c++20 -O2 -DLOCAL $file -o $file_base_name && ./$file_base_name <input.in> output.out 2> error.log",
     "file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
     "working_dir": "${file_path}",
-    "selector": "source.c++, source.c, source.cpp"
+    "selector": "source.c++, source.c, source.cpp",
+
+    "variants":
+    [
+        {
+            "name": "sanitize",
+            "shell_cmd": "g++ -Wall -std=c++20 -fsanitize=address -fsanitize=undefined -DLOCAL $file -o $file_base_name && ./$file_base_name <input.in> output.out 2> error.log"
+        }
+    ]
 }
+
 \end{lstlisting}
 \sectionend
 
@@ -113,16 +122,20 @@ void debug(Args... args)
             "args": [
                 "g++",
                 "-Wall",
-                "-std=c++17",
+                "-std=c++20",
+                "-O2",
                 "-DLOCAL",
+                "\"${file}\"",
                 "-o",
-                "${fileBasenameNoExtension}",
-                "${fileBasenameNoExtension}.cpp",
+                "\"${fileDirname}/${fileBasenameNoExtension}\"",
                 "&&",
-                "${fileBasenameNoExtension}",
-                "<input.in>",
+                "\"${fileDirname}/${fileBasenameNoExtension}\"",
+                "<",
+                "input.in",
+                ">",
                 "output.out",
-                "2>error.log"
+                "2>",
+                "error.log"
             ],
             "group": "build",
             "presentation": {
