@@ -78,9 +78,10 @@ struct segtree
     {
         if (lazy[u] == init_lazy || l == r) return;
 
-        apply_lazy(tree[left(u)], lazy[u], l, r);
+        int m = (l + r) / 2;
+        apply_lazy(tree[left(u)], lazy[u], l, m);
         merge_lazy(lazy[left(u)], lazy[u]);
-        apply_lazy(tree[right(u)], lazy[u], l, r);
+        apply_lazy(tree[right(u)], lazy[u], m + 1, r);
         merge_lazy(lazy[right(u)], lazy[u]);
 
         lazy[u] = init_lazy;
