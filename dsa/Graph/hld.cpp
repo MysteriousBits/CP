@@ -18,7 +18,7 @@ void dfsz(int u, int p, VVI& tree)
     {
         if (v == p) continue;
 
-        dfs(v, u, tree);
+        dfsz(v, u, tree);
         sz[u] += sz[v];
         if (sz[v] > mx) mx = sz[v], heavy[u] = v;
     }
@@ -29,20 +29,20 @@ void dfshld(int u, int p, VVI& tree, int head)
     label[u] = timer++;
     chain[u] = head;
 
-    if (heavy[u] != -1) dfs(heavy[u], u, tree, head);
+    if (heavy[u] != -1) dfshld(heavy[u], u, tree, head);
 
     for (int v : tree[u])
     {
         if (v == p || v == heavy[u]) continue;
 
-        dfs(v, u, tree, v);
+        dfshld(v, u, tree, v);
     }
 }
 
 void inithld(int n, VVI& tree)
 {
-    heavy = VI(n + 1);
-    cahin = VI(n + 1);
+    heavy = VI(n + 1, -1);
+    chain = VI(n + 1);
     label = VI(n + 1);
     sz = VI(n + 1);
     par = VI(n + 1);
@@ -55,7 +55,7 @@ void inithld(int n, VVI& tree)
 
 int qryup(int u, int v)
 {
-    if (dep[u] < dept[v]) swap(u, v);
+    if (dep[u] < dep[v]) swap(u, v);
 
     int head = chain[u];
     int ret = 0; // init value
