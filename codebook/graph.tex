@@ -42,60 +42,84 @@ void dijkstra(int start, vector<ll>& dis, vector<VPI>& adj)
 
 \section{LCA}
 \begin{lstlisting}[language=C++]
-int k;
-VVI tree;
-int step = 0;
-VI vis_start, vis_end;
-VVI st;
-
-void build_st(int u, int p)
+struct LCA
 {
-    st[u][0] = p;
-    for (int i = 1; i <= k; ++i)
-        st[u][i] = st[st[u][i - 1]][i - 1];
-}
+    int step = 0;
+    VI vis_start, vis_end;
+    VVI st;
 
-void dfs(int u, int p)
-{
-    vis_start[u] = step++;
-    build_st(u, p);
+    int k;
+    VVI& tree;
 
-    for (auto v : tree[u])
+    LCA(VVI& tree) : tree(tree)
     {
-        if (v != p) dfs(v, u);
+        init(tree.size() - 1);
     }
 
-    vis_end[u] = step++;
-}
-
-bool is_ancestor(int a, int b)
-{
-    return vis_start[a] < vis_start[b] && vis_end[a] > vis_end[b];
-}
-
-int lca(int a, int b)
-{
-    if (a == b) return a;
-    if (is_ancestor(a, b)) return a;
-    if (is_ancestor(b, a)) return b;
-
-    for (int i = k; i >= 0; --i)
+    void build_st(int u, int p)
     {
-        if (!is_ancestor(st[a][i], b)) a = st[a][i];
+        st[u][0] = p;
+        for (int i = 1; i <= k; ++i)
+            st[u][i] = st[st[u][i - 1]][i - 1];
     }
 
-    return st[a][0];
-}
+    void dfs(int u, int p)
+    {
+        vis_start[u] = step++;
+        build_st(u, p);
 
-void init(int n)
-{
-    vis_start.assign(n + 1, 0);
-    vis_end.assign(n + 1, 0);
+        for (auto v : tree[u])
+        {
+            if (v != p) dfs(v, u);
+        }
 
-    k = __lg(2 * n - 1);
-    st.assign(n + 1, VI(k + 1));
-    dfs(1, 1);
-}
+        vis_end[u] = step++;
+    }
+
+    bool is_ancestor(int a, int b)
+    {
+        return vis_start[a] < vis_start[b] && vis_end[a] > vis_end[b];
+    }
+
+    int get(int a, int b)
+    {
+        if (a == b) return a;
+        if (is_ancestor(a, b)) return a;
+        if (is_ancestor(b, a)) return b;
+
+        for (int i = k; i >= 0; --i)
+        {
+            if (!is_ancestor(st[a][i], b)) a = st[a][i];
+        }
+
+        return st[a][0];
+    }
+
+    void init(int n)
+    {
+        vis_start.assign(n + 1, 0);
+        vis_end.assign(n + 1, 0);
+
+        k = __lg(2 * n - 1);
+        st.assign(n + 1, VI(k + 1));
+        dfs(1, 1);
+    }
+
+    // Extra
+    int get_ancestor(int u, int n)
+    {
+        for (int i = 0; n > 0; ++i)
+        {
+            if (n & (1 << i))
+            {
+                u = st[u][i];
+                n -= (1 << i);
+            }
+        }
+
+        return u;
+    }
+};
 \end{lstlisting}
 \sectionend
 
@@ -217,5 +241,73 @@ void tarjan(VVI& g)
     for (int i = 0; i < n; ++i) disc[i] = 0;
     for (int u = 1; u < n; ++u) if (!disc[u]) dfs_scc(u, g);
 }
+\end{lstlisting}
+\sectionend
+
+\section{Centroid Decomposition}
+\begin{lstlisting}[language=C++]
+struct CD
+{
+    vector<set<int>> tree;
+    vector<int> par, sz;
+
+    CD(vector<vector<int>>& tree)
+    {
+        for (auto& v : tree)
+        {
+            this->tree.emplace_back(v.begin(), v.end());
+        }
+
+        par.resize(tree.size());
+        sz.resize(tree.size());
+        build(1, 0);
+    }
+
+    void build(int u, int p)
+    {
+        dfs(u, p);
+        int centroid = dfs(u, p, sz[u]);
+        par[centroid] = p;
+
+        vector<int> adj(tree[centroid].begin(), tree[centroid].end());
+        for (int v : adj)
+        {
+            tree[v].erase(centroid);
+            tree[centroid].erase(v);
+
+            build(v, centroid);
+        }
+    }
+
+    void dfs(int u, int p)
+    {
+        sz[u] = 1;
+
+        for (int v : tree[u])
+        {
+            if (v == p) continue;
+
+            dfs(v, u);
+            sz[u] += sz[v];
+        }
+    }
+
+    int dfs(int u, int p, int n)
+    {
+        for (int v : tree[u])
+        {
+            if (v == p) continue;
+
+            if (sz[v] > n / 2) return dfs(v, u, n);
+        }
+
+        return u;
+    }
+
+    int operator[](int i)
+    {
+        return par[i];
+    }
+};
 \end{lstlisting}
 \sectionend

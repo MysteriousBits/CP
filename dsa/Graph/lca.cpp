@@ -4,73 +4,81 @@ using namespace std;
 typedef vector<int> VI;
 typedef vector<vector<int>> VVI;
 
-int step = 0;
-VI vis_start, vis_end;
-VVI st;
-
-int k;
-VVI tree;
-
-void build_st(int u, int p)
+struct LCA
 {
-    st[u][0] = p;
-    for (int i = 1; i <= k; ++i)
-        st[u][i] = st[st[u][i - 1]][i - 1];
-}
+    int step = 0;
+    VI vis_start, vis_end;
+    VVI st;
 
-void dfs(int u, int p)
-{
-    vis_start[u] = step++;
-    build_st(u, p);
+    int k;
+    VVI& tree;
 
-    for (auto v : tree[u])
+    LCA(VVI& tree) : tree(tree)
     {
-        if (v != p) dfs(v, u);
+        init(tree.size() - 1);
     }
 
-    vis_end[u] = step++;
-}
-
-bool is_ancestor(int a, int b)
-{
-    return vis_start[a] < vis_start[b] && vis_end[a] > vis_end[b];
-}
-
-int lca(int a, int b)
-{
-    if (a == b) return a;
-    if (is_ancestor(a, b)) return a;
-    if (is_ancestor(b, a)) return b;
-
-    for (int i = k; i >= 0; --i)
+    void build_st(int u, int p)
     {
-        if (!is_ancestor(st[a][i], b)) a = st[a][i];
+        st[u][0] = p;
+        for (int i = 1; i <= k; ++i)
+            st[u][i] = st[st[u][i - 1]][i - 1];
     }
 
-    return st[a][0];
-}
-
-void init(int n)
-{
-    vis_start.assign(n + 1, 0);
-    vis_end.assign(n + 1, 0);
-
-    k = __lg(2 * n - 1);
-    st.assign(n + 1, VI(k + 1));
-    dfs(1, 1);
-}
-
-// Extra
-int get_ancestor(int u, int n)
-{
-    for (int i = 0; n > 0; ++i)
+    void dfs(int u, int p)
     {
-        if (n & (1 << i))
+        vis_start[u] = step++;
+        build_st(u, p);
+
+        for (auto v : tree[u])
         {
-            u = st[u][i];
-            n -= (1 << i);
+            if (v != p) dfs(v, u);
         }
+
+        vis_end[u] = step++;
     }
 
-    return u;
-}
+    bool is_ancestor(int a, int b)
+    {
+        return vis_start[a] < vis_start[b] && vis_end[a] > vis_end[b];
+    }
+
+    int get(int a, int b)
+    {
+        if (a == b) return a;
+        if (is_ancestor(a, b)) return a;
+        if (is_ancestor(b, a)) return b;
+
+        for (int i = k; i >= 0; --i)
+        {
+            if (!is_ancestor(st[a][i], b)) a = st[a][i];
+        }
+
+        return st[a][0];
+    }
+
+    void init(int n)
+    {
+        vis_start.assign(n + 1, 0);
+        vis_end.assign(n + 1, 0);
+
+        k = __lg(2 * n - 1);
+        st.assign(n + 1, VI(k + 1));
+        dfs(1, 1);
+    }
+
+    // Extra
+    int get_ancestor(int u, int n)
+    {
+        for (int i = 0; n > 0; ++i)
+        {
+            if (n & (1 << i))
+            {
+                u = st[u][i];
+                n -= (1 << i);
+            }
+        }
+
+        return u;
+    }
+};
