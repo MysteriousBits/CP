@@ -1,0 +1,85 @@
+\chapter{Geometry}
+
+\section{Vector3d}
+\begin{lstlisting}[language=C++]
+#define EPS 1e-12
+#define pi 3.141592653589793115997963468544185161590576171875L
+
+bool feq(long double a, long double b)
+{
+    long double del = fabsl(a - b);
+    if (del <= EPS) return true;
+
+    return del <= EPS * max({1.0L, fabsl(a), fabsl(b)});
+}
+
+struct vector3d
+{
+    long double x, y, z;
+
+    bool operator==(const vector3d p)
+    {
+        return feq(x, p.x) && feq(y, p.y) && feq(z, p.z);
+    }
+
+    vector3d operator+(const vector3d p)
+    {
+        return {x + p.x, y + p.y, z + p.z};
+    }
+
+    vector3d operator-(const vector3d p)
+    {
+        return {x - p.x, y - p.y, z - p.z};
+    }
+
+    vector3d operator*(long double scalar)
+    {
+        return {x * scalar, y * scalar, z * scalar};
+    }
+
+    vector3d operator/(long double scalar)
+    {
+        return {x / scalar, y / scalar, z / scalar};
+    }
+
+    long double magnitude()
+    {
+        return sqrtl(x * x + y * y + z * z);
+    }
+
+    vector3d unit()
+    {
+        long double m = magnitude();
+        if (feq(m, 0)) return {0, 0, 0};
+        return *this / m;
+    }
+};
+
+long double dist(vector3d& p1, vector3d& p2)
+{
+    vector3d p = p1 - p2;
+    return p.magnitude();
+}
+
+long double dot(vector3d& v1, vector3d& v2)
+{
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+long double angle(vector3d& v1, vector3d& v2)
+{
+    long double v = dot(v1, v2) / (v1.magnitude() * v2.magnitude());
+    return acosl(min(1.0L, max(-1.0L, v)));
+}
+
+vector3d cross(const vector3d& a, const vector3d& b)
+{
+    return {
+        a.y * b.z - a.z * b.y,
+        a.z * b.x - a.x * b.z,
+        a.x * b.y - a.y * b.x
+    };
+}
+
+\end{lstlisting}
+\sectionend
