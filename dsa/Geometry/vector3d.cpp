@@ -16,17 +16,17 @@ struct vector3d
 {
     long double x, y, z;
 
-    bool operator==(const vector3d p)
+    bool operator==(const vector3d& p) const
     {
         return feq(x, p.x) && feq(y, p.y) && feq(z, p.z);
     }
 
-    vector3d operator+(const vector3d p)
+    vector3d operator+(const vector3d& p) const
     {
         return {x + p.x, y + p.y, z + p.z};
     }
 
-    vector3d operator-(const vector3d p)
+    vector3d operator-(const vector3d& p) const
     {
         return {x - p.x, y - p.y, z - p.z};
     }

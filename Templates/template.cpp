@@ -36,7 +36,7 @@ using namespace std;
 
     #define loop(i, s, e) for (int i = s; i < e; ++i)
     #define inp(v) for (auto& x : v) cin >> x
-    #define outp(v) for (int i = 0, n = v.size(); i < n; ++i) cout << v[i] << " \n"[i == n - 1]
+    #define outp(v, st) for (int i = st, n = v.size(); i < n; ++i) cout << v[i] << " \n"[i == n - 1]
 
     #define nl "\n"
     #define yep cout << "YES\n"
@@ -44,12 +44,13 @@ using namespace std;
 
     #define INF (int) 1e9
     #define INFL (ll) 1e18
-    // #define MOD 998244353
-    #define MOD 1000000007
-    #define MAXN 300002
-// ==============================================
+    #define EPS 1e-9
+    #define MOD 998244353
+    // #define MOD 1000000007
+    #define MAXN 2002
+// =============================================
 
-void solve()
+void solve(int tc)
 {
     
 }
@@ -60,9 +61,9 @@ int main()
     cin.tie(NULL);
 
     int t = 1;
-    cin >> t;
-    while(t--) solve();
-
+    // cin >> t;
+    for (int i = 1; i <= t; ++i) solve(i);
+    
     #ifdef LOCAL
     cerr << "Execution time: " << 1000.f * clock() / CLOCKS_PER_SEC << " ms." << nl;
     #endif
