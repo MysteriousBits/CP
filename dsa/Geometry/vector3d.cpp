@@ -1,9 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define EPS 1e-12
-#define pi 3.141592653589793115997963468544185161590576171875L
-
 bool feq(const long double& a, const long double& b)
 {
     long double del = fabsl(a - b);
@@ -31,22 +28,32 @@ struct vector3d
         return {x - p.x, y - p.y, z - p.z};
     }
 
-    vector3d operator*(long double scalar)
+    vector3d operator*(long double scalar) const
     {
         return {x * scalar, y * scalar, z * scalar};
     }
 
-    vector3d operator/(long double scalar)
+    friend vector3d operator*(long double s, const vector3d& v)
+    {
+        return {v.x * s, v.y * s, v.z * s};
+    }
+
+    vector3d operator/(long double scalar) const
     {
         return {x / scalar, y / scalar, z / scalar};
     }
 
-    long double magnitude()
+    long double norm2() const
     {
-        return sqrtl(x * x + y * y + z * z);
+        return x * x + y * y + z * z;
     }
 
-    vector3d unit()
+    long double magnitude() const
+    {
+        return sqrtl(norm2());
+    }
+
+    vector3d unit() const
     {
         long double m = magnitude();
         if (feq(m, 0)) return {0, 0, 0};
@@ -54,20 +61,22 @@ struct vector3d
     }
 };
 
-long double dist(vector3d& p1, vector3d& p2)
+long double dist(const vector3d& p1, const vector3d& p2)
 {
-    vector3d p = p1 - p2;
-    return p.magnitude();
+    return (p1 - p2).magnitude();
 }
 
-long double dot(vector3d& v1, vector3d& v2)
+long double dot(const vector3d& v1, const vector3d& v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-long double angle(vector3d& v1, vector3d& v2)
+long double angle(const vector3d& v1, const vector3d& v2)
 {
-    long double v = dot(v1, v2) / (v1.magnitude() * v2.magnitude());
+    long double m = v1.magnitude() * v2.magnitude();
+    if (feq(m, 0)) return 0;
+
+    long double v = dot(v1, v2) / m;
     return acosl(min(1.0L, max(-1.0L, v)));
 }
 
