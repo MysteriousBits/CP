@@ -21,9 +21,15 @@ struct fenwick
         return res;
     }
 
-    void add(int i, int x)
+    void add(int i, ll x)
     {
         for (; i <= n; i += i & -i) tree[i] += x;
+    }
+    
+    void add(int l, int r, ll x)
+    {
+        add(l, x);
+        if (r < n) add(r + 1, -x);
     }
     
     ll rsq(int l, int r)
