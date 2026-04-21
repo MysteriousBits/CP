@@ -32,7 +32,7 @@ struct fenwick
         if (r < n) add(r + 1, -x);
     }
     
-    ll rsq(int l, int r)
+    ll get(int l, int r)
     {
         return get(r) - get(l - 1);
     }

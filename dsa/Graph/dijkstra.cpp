@@ -34,8 +34,9 @@ struct Node
     }
 };
 
-void dijkstra(int start, vector<ll>& dis, vector<VPI>& adj)
+vector<ll> dijkstra(int start, vector<VPI>& adj)
 {
+    vector<ll> dis(adj.size(), INFL);
     priority_queue<Node> q;
     dis[start] = 0;
     q.push({start, 0});
@@ -57,4 +58,6 @@ void dijkstra(int start, vector<ll>& dis, vector<VPI>& adj)
             }
         }
     }
+
+    return dis;
 }
