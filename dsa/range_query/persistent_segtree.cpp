@@ -28,7 +28,7 @@ struct persistent_segtree
         build(vector<T>(n, init_val));
     }
 
-    persistent_segtree(vector<T> a, function<T (T, T)> f, T val = 0)
+    persistent_segtree(vector<T>& a, function<T (T, T)> f, T val = 0)
     {
         n = a.size();
         this->f = f;
@@ -45,8 +45,9 @@ struct persistent_segtree
         return version.size() - 1;
     }
 
-    int update(int i, T x, int v)
+    int update(int i, T x, int v = -1)
     {
+        if (v == -1) v = version.size() - 1;
         int root = _update(version[v], 0, n - 1, i, x);
         version.pb(root);
         return version.size() - 1;
@@ -57,10 +58,16 @@ struct persistent_segtree
         return _get(version[v], 0, n - 1, l, r);
     }
 
+    // version is 1 indexed (0 is the initial before updates)
+    T get_kth(int ver_l, int ver_r, int k)
+    {
+        return _get_kth(version[ver_l - 1], version[ver_r], 0, n - 1, k);
+    }
+
     int _build(int l, int r, vector<T>& a)
     {
         int root = nodes.size();
-        nodes.pb(node<T>());
+        nodes.pb({});
 
         if (l == r)
         {
@@ -69,8 +76,10 @@ struct persistent_segtree
         }
 
         int mid = (l + r) / 2;
-        nodes[root].l = _build(l, mid, a);
-        nodes[root].r = _build(mid + 1, r, a);
+        int new_child = _build(l, mid, a);
+        nodes[root].l = new_child;
+        new_child = _build(mid + 1, r, a);
+        nodes[root].r = new_child;
         nodes[root].val = f(nodes[nodes[root].l].val, nodes[nodes[root].r].val);
         return root;
     }
@@ -78,7 +87,8 @@ struct persistent_segtree
     int _update(int u, int l, int r, int i, T x)
     {
         int root = nodes.size();
-        nodes.pb(nodes[u]);
+        node<T> old = nodes[u];
+        nodes.pb(old);
 
         if (l == r)
         {
@@ -87,8 +97,17 @@ struct persistent_segtree
         }
 
         int mid = (l + r) / 2;
-        if (i <= mid) nodes[root].l = _update(nodes[u].l, l, mid, i, x);
-        else nodes[root].r = _update(nodes[u].r, mid + 1, r, i, x);
+        if (i <= mid)
+        {
+            int newl = _update(nodes[u].l, l, mid, i, x);
+            nodes[root].l = newl;
+        }
+        else
+        {
+            int newr = _update(nodes[u].r, mid + 1, r, i, x);
+            nodes[root].r = newr;
+        }
+
         nodes[root].val = f(nodes[nodes[root].l].val, nodes[nodes[root].r].val);
 
         return root;
@@ -102,5 +121,16 @@ struct persistent_segtree
         int mid = (tl + tr) / 2;
         return f(_get(nodes[u].l, tl, mid, l, r),
             _get(nodes[u].r, mid + 1, tr, l, r));
+    }
+
+    int _get_kth(int u, int v, int l, int r, int k)
+    {
+        if (l == r) return l;
+
+        int mid = (l + r) / 2;
+        int kl = nodes[nodes[v].l].val - nodes[nodes[u].l].val;
+        if (kl >= k)
+            return _get_kth(nodes[u].l, nodes[v].l, l, mid, k);
+        else return _get_kth(nodes[u].r, nodes[v].r, mid + 1, r, k - kl);
     }
 };
