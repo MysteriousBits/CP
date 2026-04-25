@@ -53,19 +53,20 @@ void inithld(int n, VVI& tree)
     dfshld(1, 0, tree, 1);
 }
 
-int qryup(int u, int v)
+ll query(int u, int v, fenwick& bit)
 {
-    if (dep[u] < dep[v]) swap(u, v);
-
-    int head = chain[u];
-    int ret = 0; // init value
-    while (dep[head] > dep[v])
+    ll ret = 0; // init value
+    for (; chain[u] != chain[v]; v = par[chain[v]])
     {
-        // ret = ...(label[head], label[u]);
-        u = par[head];
-        head = chain[u];
+        if (dep[chain[u]] > dep[chain[v]]) swap(u, v);
+        
+        // ret ?= bit.rsq(label[chain[v]], label[v]);
     }
 
-    // ret = ...(label[v], label[u]);
+    if (dep[u] > dep[v]) swap(u, v);
+
+    // lca = u
+    // ret ?= bit.rsq(label[u], label[v]);
+
     return ret;
 }
