@@ -1,19 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef vector<int> VI;
-typedef vector<vector<int>> VVI;
-
 struct LCA
 {
-    int step = 0;
-    VI vis_start, vis_end;
-    VVI st;
+    int step = 0, k = 0;
+    vector<int> vis_start, vis_end;
+    vector<vector<int>> st;
+    vector<vector<int>>& tree;
 
-    int k;
-    VVI& tree;
-
-    LCA(VVI& tree) : tree(tree)
+    LCA(vector<vector<int>>& tree) : tree(tree)
     {
         init(tree.size() - 1);
     }
@@ -63,7 +58,7 @@ struct LCA
         vis_end.assign(n + 1, 0);
 
         k = __lg(2 * n - 1);
-        st.assign(n + 1, VI(k + 1));
+        st.assign(n + 1, vector<int>(k + 1));
         dfs(1, 1);
     }
 
