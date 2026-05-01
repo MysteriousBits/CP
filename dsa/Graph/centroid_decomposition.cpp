@@ -3,34 +3,28 @@ using namespace std;
 
 struct CD
 {
-    vector<set<int>> tree;
+    vector<vector<int>>& tree;
     vector<int> par, sz;
+    vector<bool> dead;
 
-    CD(vector<vector<int>>& tree)
+    CD(vector<vector<int>>& tree) : tree(tree)
     {
-        for (auto& v : tree)
-        {
-            this->tree.emplace_back(v.begin(), v.end());
-        }
-
         par.resize(tree.size());
         sz.resize(tree.size());
+        dead.resize(tree.size());
         build(1, 0);
     }
 
     void build(int u, int p)
     {
         dfs(u, p);
-        int centroid = dfs(u, p, sz[u]);
-        par[centroid] = p;
+        u = dfs(u, p, sz[u]);
+        dead[u] = true;
+        par[u] = p;
 
-        vector<int> adj(tree[centroid].begin(), tree[centroid].end());
-        for (int v : adj)
+        for (int v : tree[u])
         {
-            tree[v].erase(centroid);
-            tree[centroid].erase(v);
-
-            build(v, centroid);
+            if (!dead[v]) build(v, u);
         }
     }
 
@@ -40,7 +34,7 @@ struct CD
 
         for (int v : tree[u])
         {
-            if (v == p) continue;
+            if (v == p || dead[v]) continue;
 
             dfs(v, u);
             sz[u] += sz[v];
@@ -51,7 +45,7 @@ struct CD
     {
         for (int v : tree[u])
         {
-            if (v == p) continue;
+            if (v == p || dead[v]) continue;
 
             if (sz[v] > n / 2) return dfs(v, u, n);
         }
