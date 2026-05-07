@@ -1,13 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef vector<int> VI;
-typedef vector<vector<int>> VVI;
-
-VI heavy, chain, label, par, sz, dep;
+vector<int> heavy, chain, label, par, sz, dep;
 int timer;
 
-void dfsz(int u, int p, VVI& tree)
+void dfsz(int u, int p, vector<vector<int>>& tree)
 {
     sz[u] = 1;
     par[u] = p;
@@ -24,7 +21,7 @@ void dfsz(int u, int p, VVI& tree)
     }
 }
 
-void dfshld(int u, int p, VVI& tree, int head)
+void dfshld(int u, int p, vector<vector<int>>& tree, int head)
 {
     label[u] = timer++;
     chain[u] = head;
@@ -39,34 +36,37 @@ void dfshld(int u, int p, VVI& tree, int head)
     }
 }
 
-void inithld(int n, VVI& tree)
+void inithld(vector<vector<int>>& tree)
 {
-    heavy = VI(n + 1, -1);
-    chain = VI(n + 1);
-    label = VI(n + 1);
-    sz = VI(n + 1);
-    par = VI(n + 1);
-    dep = VI(n + 1);
+    int n = tree.size();
+    heavy = VI(n, -1);
+    chain = VI(n);
+    label = VI(n);
+    sz = VI(n);
+    par = VI(n);
+    dep = VI(n);
 
     timer = 1;
     dfsz(1, 0, tree);
     dfshld(1, 0, tree, 1);
 }
 
-ll query(int u, int v, fenwick& bit)
+ll query(int u, int v /*, fenwick/segtree/anything& ds*/)
 {
     ll ret = 0; // init value
     for (; chain[u] != chain[v]; v = par[chain[v]])
     {
         if (dep[chain[u]] > dep[chain[v]]) swap(u, v);
         
-        // ret ?= bit.rsq(label[chain[v]], label[v]);
+        // ret ?= ds.query(label[chain[v]], label[v]);
     }
 
     if (dep[u] > dep[v]) swap(u, v);
 
-    // lca = u
-    // ret ?= bit.rsq(label[u], label[v]);
+    // lca is u
+    // ret ?= ds.query(label[u], label[v]);
 
     return ret;
 }
+
+// Updating u : ds.update(label[u]...)
