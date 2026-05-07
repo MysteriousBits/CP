@@ -39,12 +39,12 @@ void dfshld(int u, int p, vector<vector<int>>& tree, int head)
 void inithld(vector<vector<int>>& tree)
 {
     int n = tree.size();
-    heavy = VI(n, -1);
-    chain = VI(n);
-    label = VI(n);
-    sz = VI(n);
-    par = VI(n);
-    dep = VI(n);
+    heavy = vector<int>(n, -1);
+    chain = vector<int>(n);
+    label = vector<int>(n);
+    sz = vector<int>(n);
+    par = vector<int>(n);
+    dep = vector<int>(n);
 
     timer = 1;
     dfsz(1, 0, tree);
