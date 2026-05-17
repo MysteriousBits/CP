@@ -58,6 +58,7 @@ void deleteall(int root)
 {
     if (trie[root][0]) deleteall(trie[root][0]);
     if (trie[root][1]) deleteall(trie[root][1]);
+    tri[root][0] = tri[root][1] = 0;
     triesz[root] = 0;
 }
 
