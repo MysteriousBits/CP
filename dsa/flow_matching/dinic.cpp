@@ -3,87 +3,55 @@ using namespace std;
 typedef long long ll;
 #define INFL (ll) 1e18
 
-struct Dinic
-{
-    int s, t, n;
-    vector<vector<int>> g;
-    vector<vector<ll>> cap;
-    vector<int> dist, ptr;
- 
-    Dinic(int s, int t, vector<vector<pair<int, ll>>>& dg) : s(s), t(t)
-    {
-        n = dg.size() - 1;
-        g.resize(n + 1);
-        dist.resize(n + 1); ptr.resize(n + 1);
-        cap.resize(n + 1, vector<ll>(n + 1));
-        for (int u = 1; u <= n; ++u) for (auto[v, c] : dg[u])
-        {
-            g[u].pb(v);
-            g[v].pb(u);
-            cap[u][v] += c;
-        }
- 
-        for (int u = 1; u <= n; ++u)
-        {
-            sort(g[u].begin(), g[u].end());
-            g[u].erase(unique(g[u].begin(), g[u].end()), g[u].end());
-        }
+struct Dinic {
+  struct Edge { int u, v; ll oc, c; };
+  int s, t, n;
+  vector<vector<int>> g;
+  vector<Edge> edges;
+  vector<int> dist, ptr;
+
+  Dinic(int n, int s, int t) : s(s), t(t), n(n) { g.resize(n + 1); }
+
+  void add_edge(int u, int v, ll cap, ll rcap = 0) {
+    g[u].pb(edges.size()); g[v].pb(edges.size() + 1);
+    edges.pb({u, v, cap, cap}); edges.pb({v, u, rcap, rcap});
+  }
+  bool bfs() {
+    dist.assign(n + 1, -1); dist[s] = 0;
+    queue<int> q; q.push(s);
+    while (!q.empty()) {
+      int u = q.front(); q.pop();
+      for (int id : g[u]) {
+        auto& e = edges[id];
+        if (dist[e.v] == -1 && e.c)
+          dist[e.v] = dist[u] + 1, q.push(e.v);
+      }
     }
- 
-    bool bfs()
-    {
-        dist.assign(n + 1, -1);
-        dist[s] = 0;
-        queue<int> q;
-        q.push(s);
- 
-        while (!q.empty())
-        {
-            int u = q.front();
-            q.pop();
- 
-            for (int v : g[u])
-            {
-                if (dist[v] != -1 || !cap[u][v]) continue;
- 
-                dist[v] = dist[u] + 1;
-                q.push(v);
-            }
-        }
- 
-        return dist[t] != -1;
+    return dist[t] != -1;
+  }
+  ll dfs(int u, ll f) {
+    if (u == t) return f;
+    for (int& p = ptr[u]; p < (int)g[u].size(); p++) {
+      auto& e = edges[g[u][p]];
+      if (dist[e.v] != dist[u] + 1 || !e.c) continue;
+      ll now = dfs(e.v, min(f, e.c));
+      if (!now) continue;
+      e.c -= now; edges[g[u][p] ^ 1].c += now;
+      return now;
     }
- 
-    ll dfs(int u, ll f)
-    {
-        if (u == t) return f;
- 
-        for (int& p = ptr[u]; p < (int) g[u].size(); ++p)
-        {
-            int v = g[u][p];
-            if (dist[v] != dist[u] + 1 || !cap[u][v]) continue;
- 
-            ll now = dfs(v, min(f, cap[u][v]));
-            if (!now) continue;
- 
-            cap[u][v] -= now;
-            cap[v][u] += now;
-            return now;
-        }
- 
-        return 0;
+    return 0;
+  }
+  ll maxflow() {
+    ll f = 0;
+    while (bfs()) {
+      ptr.assign(n + 1, 0);
+      while (ll sent = dfs(s, INFL)) f += sent;
     }
- 
-    ll flow()
-    {
-        ll f = 0;
-        while (bfs())
-        {
-            ptr.assign(n + 1, 0);
-            while (ll sent = dfs(s, INFL))
-                f += sent;
-        }
- 
-        return f;
-    }
+    return f;
+  }
+  // flow on edge id: rev=false for forward, rev=true for reverse (undirected)
+  ll flow(int id, bool rev = false) {
+    id = id << 1 | rev;
+    return edges[id].oc - edges[id].c;
+  }
 };
