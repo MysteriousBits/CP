@@ -37,15 +37,17 @@ void erase(int x)
 }
 
 // max xor with x
-int get_max(int x)
+int get_kth(int x, int k = 1)
 {
     int cur = 0, ans = 0;
 
     for (int i = bitsz; i >= 0; --i)
     {
-        int child = x & (1 << i) ? 1 : 0;
-        child = 1 - child; // remove for get_min()
-        if (!trie[cur][child] || !triesz[trie[cur][child]]) child = 1 - child;
+        int child = (x >> i) & 1;
+        child = 1 - child; // remove for kth_min()
+        if (!trie[cur][child]) child = 1 - child;
+        else if (triesz[trie[cur][child]] < k)
+            k -= triesz[trie[cur][child]], child = 1 - child;
 
         cur = trie[cur][child];
         ans |= child << i;
@@ -58,7 +60,7 @@ void deleteall(int root)
 {
     if (trie[root][0]) deleteall(trie[root][0]);
     if (trie[root][1]) deleteall(trie[root][1]);
-    tri[root][0] = tri[root][1] = 0;
+    trie[root][0] = trie[root][1] = 0;
     triesz[root] = 0;
 }
 
