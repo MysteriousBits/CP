@@ -2,8 +2,10 @@
 
 T=10
 
-g++ -std=c++17 brute.cpp -o brute
-g++ -std=c++17 sol.cpp -o sol
+if [[ "$1" == "-c" ]]; then
+    g++ -std=c++20 brute.cpp -o brute
+    g++ -std=c++20 sol.cpp -o sol
+fi
 
 for ((i = 0; i < $T; i++))
 do
